@@ -66,16 +66,10 @@ const table = computed(() => {
     : []
 })
 
-const list = (items: number[]) =>
-  items.length < 2
-    ? items.join('')
-    : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`
-
-/** Each swatch is a real cell with the same data attributes the grid uses, so the key cannot drift from it. */
+/** Each swatch is a real one-bit row with the same data attributes the grid uses, so the key cannot drift from it. */
 const KEY = [
-  { label: 'Set by the selected word', 'data-hit': 'true' },
-  { label: 'Probed by the lookup', 'data-probe': 'set' },
-  { label: 'Probed by the lookup, row empty', 'data-probe': 'unset' },
+  { label: 'Set by selected word', 'data-hit': 'true', set: false },
+  { label: 'Looked up', 'data-probe': 'true', set: false },
 ]
 
 function Lookup() {
@@ -84,35 +78,9 @@ function Lookup() {
   if (!word) return null
   if (!f) return <p class="pt-3">Add a word first.</p>
 
-  const { rows, fingerprint } = equation(word, f.size, bits.value)
-  const sum = rows.reduce((acc, i) => acc ^ table.value[i], 0)
-  const possible = f.has(word)
-  const wanted = binary(fingerprint, bits.value)
-
   return (
-    <p class="pt-3" aria-live="polite">
-      {possible ? (
-        <>
-          <strong class="font-semibold">Possible match.</strong> Rows{' '}
-          {list(rows)} add up (XOR) to {binary(sum, bits.value)}, which is the
-          fingerprint of &ldquo;{word}&rdquo;
-          {words.value.includes(word) ? (
-            <>, and it was added.</>
-          ) : (
-            <>
-              . It was never added, so this is a{' '}
-              <strong class="font-semibold">false positive</strong>.
-            </>
-          )}
-        </>
-      ) : (
-        <>
-          <strong class="font-semibold">Certain miss.</strong> Rows {list(rows)}{' '}
-          add up (XOR) to {binary(sum, bits.value)}, but the fingerprint of
-          &ldquo;
-          <s>{word}</s>&rdquo; is {wanted}, so it was never added.
-        </>
-      )}
+    <p class="pt-3 font-semibold" aria-live="polite">
+      {f.has(word) ? 'Possible match' : 'Certain miss'}
     </p>
   )
 }
@@ -223,52 +191,57 @@ export function RibbonDemo() {
           </Search>
         </div>
 
-        <p class="pb-3 text-ink-2" aria-live="polite">
-          {f
-            ? `${words.value.length} ${words.value.length === 1 ? 'word' : 'words'} in ${f.size} rows of ${bits.value} bits: ${f.size * bits.value} bits. Adding or removing a word builds the filter again.`
-            : 'Add a word to build the filter.'}
-        </p>
-
         {f && (
-          <ul aria-label="Key" class="flex flex-wrap gap-x-6 gap-y-2 pb-4">
-            {KEY.map(({ label, ...state }) => (
-              <li key={label} class="flex items-center gap-2">
+          <ul
+            aria-label="Key"
+            class="flex flex-wrap gap-x-6 gap-y-2 pb-5 text-sm"
+          >
+            {KEY.map(({ label, set, ...state }) => (
+              <li key={label} class="flex items-center gap-3">
                 <span
                   aria-hidden="true"
-                  class="bit m-0 inline-block h-7 w-7 shrink-0"
+                  class="bit-row shrink-0"
+                  style={{ '--bits': 1 }}
                   {...state}
-                />
+                >
+                  <span class="bit" data-set={set} />
+                </span>
                 {label}
               </li>
             ))}
           </ul>
         )}
 
-        <ul class="grid grid-cols-[repeat(auto-fill,minmax(4.5rem,1fr))] pl-px pt-px">
+        <ul
+          class="bit-rows gap-x-6 gap-y-8 pl-px pt-px"
+          style={{ '--bits': bits.value, '--cell': '1.75rem' }}
+        >
           {table.value.map((value, index) => (
-            <li
-              // biome-ignore lint/suspicious/noArrayIndexKey: rows are positional
-              key={index}
-              class="bit"
-              data-set={value !== 0}
-              data-hit={hit.has(index) ? 'true' : undefined}
-              data-probe={
-                probe.has(index) ? (value !== 0 ? 'set' : 'unset') : undefined
-              }
-            >
-              <span class="readout absolute left-1 top-0.5 text-[0.65rem] leading-none opacity-80">
+            <li key={index}>
+              <span
+                aria-hidden="true"
+                class="readout block pb-3 text-[0.65rem] leading-none text-ink-2"
+              >
                 {index}
               </span>
-              <span class="readout absolute inset-0 grid place-items-center text-sm">
-                {binary(value, bits.value)}
+              <span class="sr-only">
+                Row {index}: {binary(value, bits.value)}
               </span>
+              <div
+                aria-hidden="true"
+                class="bit-row"
+                data-hit={hit.has(index) ? 'true' : undefined}
+                data-probe={probe.has(index) ? 'true' : undefined}
+              >
+                {binary(value, bits.value)
+                  .split('')
+                  .map((bit, k) => (
+                    <div key={k} class="bit" data-set={bit === '1'} />
+                  ))}
+              </div>
             </li>
           ))}
         </ul>
-        <p class="pt-4 text-ink-2">
-          Each cell is one row of the table. A word is in the filter, as far as
-          it can tell, when its rows add up (XOR) to its fingerprint.
-        </p>
       </div>
     </div>
   )

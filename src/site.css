@@ -12,6 +12,7 @@
   --ink-2: oklch(43% 0.03 215);
   --rule: oklch(82% 0.02 220);
   --accent: oklch(50% 0.22 285);
+  --probe: oklch(55% 0.22 25);
   color-scheme: light;
 }
 
@@ -23,6 +24,7 @@
     --ink-2: oklch(74% 0.02 220);
     --rule: oklch(36% 0.02 225);
     --accent: oklch(74% 0.15 295);
+    --probe: oklch(72% 0.17 25);
     color-scheme: dark;
   }
 }
@@ -423,23 +425,34 @@
     border-color: var(--ink);
   }
 
-  .bit[data-hit="true"] {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--paper);
+  .bit-row {
+    display: grid;
+    grid-template-columns: repeat(var(--bits, 4), var(--cell, 1.1rem));
+    padding: 1px 0 0 1px;
   }
 
-  /* Searched cells: solid frame when probed bit is set, dashed when it is not. */
-  .bit[data-probe="set"] {
-    outline: 3px solid var(--accent);
-    outline-offset: -3px;
-    z-index: 1;
+  .bit-rows {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        calc(var(--bits, 4) * var(--cell, 1.1rem) + 1px)
+      );
+    gap: 1.1rem 0.75rem;
   }
 
-  .bit[data-probe="unset"] {
-    outline: 3px dashed var(--ink);
-    outline-offset: -3px;
-    z-index: 1;
+  .bit-row[data-hit="true"] {
+    box-shadow:
+      0 0 0 2px var(--paper),
+      0 0 0 5px var(--accent);
+  }
+
+  .bit-row[data-probe="true"] {
+    outline: 3px solid var(--probe);
+    outline-offset: 2px;
+  }
+
+  .bit-row[data-hit="true"][data-probe="true"] {
+    outline-offset: 6px;
   }
 }
 
@@ -453,11 +466,6 @@
   .on-ink .bit[data-set="true"] {
     background: var(--paper);
     border-color: var(--paper);
-  }
-
-  .on-ink .bit[data-hit="true"] {
-    background: var(--accent);
-    border-color: var(--accent);
   }
 
   .on-ink pre.code,
