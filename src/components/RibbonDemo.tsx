@@ -48,7 +48,7 @@ const words = signal<string[]>([])
 const selected = signal(-1)
 const searched = signal('')
 
-/** A Ribbon filter is static: any change to the words builds a new one. */
+/** A ribbon filter is static: any change to the words builds a new one. */
 const filter = computed(() =>
   words.value.length === 0
     ? undefined
@@ -85,7 +85,7 @@ function Lookup() {
   )
 }
 
-/** A Ribbon filter you build from a list of words, then probe. */
+/** A ribbon filter you build from a list of words, then probe. */
 export function RibbonDemo() {
   const f = filter.value
   const picked = words.value[selected.value]

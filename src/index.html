@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta
       name="description"
-      content="Signature Search is a full-text search library for static sites that indexes each document as Ribbon filters."
+      content="Signature Search is a full-text search library for static sites that indexes each document as ribbon filters."
     >
     <title>Signature Search</title>
     <link rel="stylesheet" href="/site.css">
@@ -24,7 +24,7 @@
               class="max-w-[34rem] text-[clamp(1.25rem,2.2vw,1.625rem)] leading-snug"
             >
               Signature Search is a JavaScript library that indexes documents as
-              compact Ribbon filters for searching.
+              compact ribbon filters for searching.
             </p>
             <div class="mt-8 max-w-[34rem]">
               <pre
@@ -342,8 +342,7 @@
               <div class="bit hero-bit" data-set="true" style="--i: 159;"></div>
             </div>
             <figcaption class="pt-3 text-sm text-ink-2">
-              A Ribbon filter: a table of 4-bit rows, built once from a
-              document’s words.
+              A ribbon filter built from a document’s words.
             </figcaption>
           </figure>
         </div>
@@ -436,13 +435,11 @@
                   is a close cousin of the
                   <a href="https://en.wikipedia.org/wiki/Bloom_filter"
                     >Bloom filter</a
-                  >. It is built once from a complete set of words, which it
-                  stores as a compact table of bits. Asking about a word either
-                  rules it out for certain or says it probably was there. For
-                  the same error rate, the table is smaller than a Bloom
-                  filter’s, and the price is that it cannot be changed once
-                  built. A document is indexed in one go, so that costs nothing
-                  here.
+                  >. It is built from a set of words, such as the contents of a
+                  document, which it stores as a compact table of bits. Asking
+                  about a word either rules it out for certain or says it
+                  probably was there. This table is smaller than a Bloom
+                  filter’s for the same error rate.
                   <a href="%BASE_URL%ribbon-filter.html">Try one by hand.</a>
                 </p>
                 <p>
@@ -546,7 +543,7 @@
                       <p class="mt-1 text-sm text-ink-2">
                         <strong>Stemming</strong>
                         cuts a word back to its root, so “breaches” and
-                        “breaching” both become “breach”. A Ribbon filter only
+                        “breaching” both become “breach”. A ribbon filter only
                         answers for whole words, so stemming is how a search
                         finds other forms of the word. Signature Search takes
                         any stemmer you give it.
@@ -781,7 +778,7 @@
                         <p class="mt-1 text-sm text-ink-2">
                           The resulting stems are then counted, weighted by
                           field, and grouped by how often they occur. Each group
-                          becomes its own Ribbon filter, a table of fingerprint
+                          becomes its own ribbon filter, a table of fingerprint
                           rows. Shown here with 4-bit rows;
                           <a href="%BASE_URL%ribbon-filter.html"
                             >build one yourself</a
@@ -930,7 +927,7 @@
                             >Signature Search</a
                           >
                         </td>
-                        <td>A set of Ribbon filters per document</td>
+                        <td>A set of ribbon filters per document</td>
                         <td>
                           Small to medium sites that want ranking and the
                           smallest payload.
