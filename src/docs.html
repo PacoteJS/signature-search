@@ -44,6 +44,8 @@
                 <pre
                   class="code"
                   tabindex="0"
+                  role="region"
+                  aria-label="Install command"
                 ><code>npm install @pacote/signature-search</code></pre>
                 <p>
                   The package ships as ES modules and CommonJS, with TypeScript
@@ -68,6 +70,8 @@
                 <pre
                   class="code"
                   tabindex="0"
+                  role="region"
+                  aria-label="Example: describe the index"
                 ><code><span class="tok-c">// search.ts</span>
 <span class="tok-k">import</span> { SignatureSearch } <span class="tok-k">from</span> <span class="tok-s">'@pacote/signature-search'</span>
 <span class="tok-k">import</span> { stemmer } <span class="tok-k">from</span> <span class="tok-s">'stemmer'</span>
@@ -98,6 +102,8 @@
                 <pre
                   class="code"
                   tabindex="0"
+                  role="region"
+                  aria-label="Example: build the index"
                 ><code><span class="tok-k">import</span> { writeFileSync } <span class="tok-k">from</span> <span class="tok-s">'node:fs'</span>
 <span class="tok-k">import</span> { search } <span class="tok-k">from</span> <span class="tok-s">'./search'</span>
 
@@ -121,6 +127,8 @@ writeFileSync(<span class="tok-s">'public/search-index.json'</span>, JSON.string
                 <pre
                   class="code"
                   tabindex="0"
+                  role="region"
+                  aria-label="Example: search in the browser"
                 ><code><span class="tok-k">import</span> { search } <span class="tok-k">from</span> <span class="tok-s">'./search'</span>
 
 search.load(<span class="tok-k">await</span> (<span class="tok-k">await</span> fetch(<span class="tok-s">'/search-index.json'</span>)).json())
@@ -142,7 +150,12 @@ search.search(<span class="tok-s">'whale +ahab -pequod'</span>)
             <div class="min-w-0">
               <h2 class="chapter-title">Queries</h2>
               <div class="flow chapter-text">
-                <div class="overflow-x-auto" tabindex="0">
+                <div
+                  class="overflow-x-auto"
+                  tabindex="0"
+                  role="region"
+                  aria-label="Query syntax"
+                >
                   <table class="ledger">
                     <thead>
                       <tr>
@@ -186,7 +199,12 @@ search.search(<span class="tok-s">'whale +ahab -pequod'</span>)
             <div class="min-w-0">
               <h2 class="chapter-title">Options</h2>
               <div class="flow chapter-text">
-                <div class="overflow-x-auto" tabindex="0">
+                <div
+                  class="overflow-x-auto"
+                  tabindex="0"
+                  role="region"
+                  aria-label="Options"
+                >
                   <table class="ledger">
                     <thead>
                       <tr>
@@ -287,7 +305,12 @@ search.search(<span class="tok-s">'whale +ahab -pequod'</span>)
             <div class="min-w-0">
               <h2 class="chapter-title">Methods</h2>
               <div class="flow chapter-text">
-                <div class="overflow-x-auto" tabindex="0">
+                <div
+                  class="overflow-x-auto"
+                  tabindex="0"
+                  role="region"
+                  aria-label="Members"
+                >
                   <table class="ledger">
                     <thead>
                       <tr>
