@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="description"
+      content="Six client-side search libraries, same twenty novels: results, timings and index sizes."
+    >
+    <title>Compare · Signature Search</title>
+    <link rel="stylesheet" href="/site.css">
+  </head>
+  <body>
+    <!--include header compare-->
+    <div class="on-ink">
+      <div class="wrap band-title">
+        <h1>Compare</h1>
+      </div>
+    </div>
+    <main id="main" tabindex="-1" class="focus:outline-none">
+      <div class="wrap pt-10 pb-24">
+        <div class="spread">
+          <aside>
+            <p class="text-ink-2">
+              Twenty public-domain novels, indexed by six libraries. Results and
+              timings are measured in your browser as you type. Index sizes are
+              the files this site serves.
+            </p>
+          </aside>
+          <div id="app"></div>
+        </div>
+      </div>
+    </main>
+    <script type="module" src="/search/main.tsx"></script>
+  </body>
+</html>

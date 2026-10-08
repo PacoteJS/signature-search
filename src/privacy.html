@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="description"
+      content="What a Signature Search index stores about the people it was built from."
+    >
+    <title>Privacy · Signature Search</title>
+    <link rel="stylesheet" href="/site.css">
+  </head>
+  <body>
+    <!--include header about-->
+    <div class="on-ink">
+      <div class="wrap band-title">
+        <h1>Privacy</h1>
+      </div>
+    </div>
+    <main id="main" tabindex="-1" class="focus:outline-none">
+      <div class="wrap pt-10 pb-24">
+        <!--include demo-nav privacy-->
+        <div class="spread">
+          <aside>
+            <p class="text-ink-2">
+              Left: 100 generated people. Right: everything the index keeps
+              about them, a redacted summary plus one signature per frequency
+              bucket. A signature cannot be read back into words, but it still
+              answers searches on any field, including redacted ones such as a
+              street name.
+            </p>
+          </aside>
+          <div id="app"></div>
+        </div>
+      </div>
+    </main>
+    <script type="module" src="/privacy/main.tsx"></script>
+  </body>
+</html>
