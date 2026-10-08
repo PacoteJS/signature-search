@@ -30,6 +30,8 @@
               <pre
                 class="code"
                 tabindex="0"
+                role="region"
+                aria-label="Install command"
               ><code>npm install @pacote/signature-search</code></pre>
             </div>
           </div>
@@ -446,10 +448,10 @@
               <h2 class="chapter-title">The problem</h2>
               <div class="flow chapter-text">
                 <p>
-                  Hosting a static website and with no server to ask, search
-                  must run in the visitor’s browser and the index ships with the
-                  site. A conventional inverted index lists every word and every
-                  document it appears in. Even on a medium sized site, it can be
+                  A static website has no server to ask, so search must run in
+                  the visitor’s browser and the index ships with the site. A
+                  conventional inverted index lists every word and every
+                  document it appears in. Even on a medium-sized site, it can be
                   a lot of bytes before anyone has typed anything.
                 </p>
                 <p>
@@ -948,7 +950,12 @@
                   six libraries on the same corpus. These are the trade-offs
                   behind the numbers.
                 </p>
-                <div class="overflow-x-auto" tabindex="0">
+                <div
+                  class="overflow-x-auto"
+                  tabindex="0"
+                  role="region"
+                  aria-label="Library comparison"
+                >
                   <table class="ledger">
                     <thead>
                       <tr>
@@ -1029,5 +1036,6 @@
         </section>
       </div>
     </main>
+    <script type="module" src="/page-index.ts"></script>
   </body>
 </html>

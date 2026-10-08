@@ -36,13 +36,18 @@
   color: var(--paper);
 }
 
-.on-accent {
+/* `data-flood` marks one line of the page index while it sits over the red band. */
+.on-accent,
+[data-flood] {
   --paper: oklch(97% 0.01 25);
   --accent: oklch(42% 0.16 25);
   --rule: color-mix(in oklab, var(--paper) 45%, var(--accent));
   --ink-2: color-mix(in oklab, var(--paper) 92%, var(--accent));
-  background: var(--accent);
   color: var(--paper);
+}
+
+.on-accent {
+  background: var(--accent);
 }
 
 .on-accent a:hover,
@@ -50,12 +55,14 @@
   text-decoration-thickness: 2px;
 }
 
-.on-accent a:hover {
+.on-accent a:hover,
+[data-flood] a:hover {
   color: inherit;
   text-decoration-color: currentColor;
 }
 
-.on-accent :focus-visible {
+.on-accent :focus-visible,
+[data-flood] :focus-visible {
   outline-color: var(--paper);
 }
 
@@ -224,7 +231,7 @@
     scroll-margin-top: 1rem;
   }
 
-  /* Sticky chapter list in the margin, over the chapters' bands. Its own panel keeps it readable on every band. */
+  /* Sticky chapter list in the margin, over the chapters' bands. It has no panel: page-index.ts flips a line to paper text while that line is over the red band. */
   .chapter-nav {
     @apply pointer-events-none absolute inset-y-0 left-0 right-0 z-10 hidden lg:block;
   }
@@ -237,9 +244,23 @@
     @apply pointer-events-auto;
   }
 
-  /* The "On this page" list: the same panel on About and Docs, so it reads on any band. */
+  /* The "On this page" list on About and Docs: a hairline per line, accent on the chapter in view. */
   .page-index {
-    @apply sticky top-6 w-[13rem] border border-rule bg-paper p-4;
+    @apply sticky top-6 w-[13rem];
+  }
+
+  .page-index a {
+    @apply block border-l-2 border-rule py-1 pl-3 no-underline hover:underline;
+  }
+
+  .page-index a[aria-current="location"] {
+    @apply border-accent font-semibold text-accent;
+  }
+
+  /* Over the red band the accent would vanish, so the chapter in view takes paper instead. */
+  [data-flood] a[aria-current="location"] {
+    border-color: var(--paper);
+    color: var(--paper);
   }
 
   .chapter-grid {

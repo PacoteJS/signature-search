@@ -71,6 +71,13 @@ const list = (items: number[]) =>
     ? items.join('')
     : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`
 
+/** Each swatch is a real cell with the same data attributes the grid uses, so the key cannot drift from it. */
+const KEY = [
+  { label: 'Set by the selected word', 'data-hit': 'true' },
+  { label: 'Probed by the lookup', 'data-probe': 'set' },
+  { label: 'Probed by the lookup, row empty', 'data-probe': 'unset' },
+]
+
 function Lookup() {
   const f = filter.value
   const word = searched.value
@@ -222,6 +229,21 @@ export function RibbonDemo() {
             : 'Add a word to build the filter.'}
         </p>
 
+        {f && (
+          <ul aria-label="Key" class="flex flex-wrap gap-x-6 gap-y-2 pb-4">
+            {KEY.map(({ label, ...state }) => (
+              <li key={label} class="flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  class="bit m-0 inline-block h-7 w-7 shrink-0"
+                  {...state}
+                />
+                {label}
+              </li>
+            ))}
+          </ul>
+        )}
+
         <ul class="grid grid-cols-[repeat(auto-fill,minmax(4.5rem,1fr))] pl-px pt-px">
           {table.value.map((value, index) => (
             <li
@@ -244,9 +266,8 @@ export function RibbonDemo() {
           ))}
         </ul>
         <p class="pt-4 text-ink-2">
-          Each cell is one row of the table. Red: rows the selected word adds
-          up. Frame: rows the lookup added up. A word is in the filter, as far
-          as it can tell, when those rows add up (XOR) to its fingerprint.
+          Each cell is one row of the table. A word is in the filter, as far as
+          it can tell, when its rows add up (XOR) to its fingerprint.
         </p>
       </div>
     </div>
