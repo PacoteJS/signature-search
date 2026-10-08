@@ -6,23 +6,23 @@
 @tailwind utilities;
 
 :root {
-  --paper: oklch(96.5% 0.013 88);
-  --paper-2: oklch(93% 0.017 88);
-  --ink: oklch(24% 0.026 60);
-  --ink-2: oklch(43% 0.026 62);
-  --rule: oklch(81% 0.022 85);
-  --accent: oklch(51% 0.17 33);
+  --paper: oklch(97% 0.008 225);
+  --paper-2: oklch(94% 0.012 225);
+  --ink: oklch(24% 0.03 215);
+  --ink-2: oklch(43% 0.03 215);
+  --rule: oklch(82% 0.02 220);
+  --accent: oklch(50% 0.22 285);
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: oklch(21% 0.014 62);
-    --paper-2: oklch(25.5% 0.016 62);
-    --ink: oklch(92% 0.016 85);
-    --ink-2: oklch(73% 0.022 80);
-    --rule: oklch(36% 0.017 62);
-    --accent: oklch(74% 0.14 42);
+    --paper: oklch(20% 0.02 225);
+    --paper-2: oklch(24.5% 0.022 225);
+    --ink: oklch(93% 0.01 220);
+    --ink-2: oklch(74% 0.02 220);
+    --rule: oklch(36% 0.02 225);
+    --accent: oklch(74% 0.15 295);
     color-scheme: dark;
   }
 }
@@ -31,12 +31,14 @@
 .on-ink {
   --rule: color-mix(in oklab, var(--paper) 28%, var(--ink));
   --ink-2: color-mix(in oklab, var(--paper) 72%, var(--ink));
-  --accent: oklch(76% 0.15 45);
+  --accent: oklch(76% 0.13 295);
   background: var(--ink);
   color: var(--paper);
 }
 
 .on-accent {
+  --paper: oklch(97% 0.01 25);
+  --accent: oklch(42% 0.16 25);
   --rule: color-mix(in oklab, var(--paper) 45%, var(--accent));
   --ink-2: color-mix(in oklab, var(--paper) 92%, var(--accent));
   background: var(--accent);
@@ -144,8 +146,8 @@
 @media (prefers-color-scheme: dark) {
   pre.code,
   .on-ink {
-    --ink: oklch(14% 0.012 62);
-    --paper: oklch(92% 0.016 85);
+    --ink: oklch(14% 0.015 220);
+    --paper: oklch(93% 0.01 220);
   }
 }
 
@@ -305,7 +307,7 @@
   pre.code {
     @apply whitespace-pre-wrap break-words sm:whitespace-pre sm:break-normal;
     --code-comment: color-mix(in oklab, var(--paper) 64%, var(--ink));
-    --code-string: oklch(78% 0.14 48);
+    --code-string: oklch(80% 0.12 170);
     background: var(--ink);
     color: var(--paper);
     padding: 1.4rem 1.6rem;
