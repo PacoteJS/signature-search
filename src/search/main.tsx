@@ -81,7 +81,7 @@ function Engine({ title, terms, backend }: EngineProps) {
   )
 }
 
-/** Log scale, one row per library: filled square is the gzipped size, hollow the raw size. */
+/** One row per library: filled square is the gzipped size, hollow the raw size. */
 function SizeChart({
   all,
 }: {
@@ -170,9 +170,18 @@ function SizeChart({
           </span>
         ))}
       </div>
-      <p class="pt-5 text-sm text-ink-2">
-        Filled square and first figure: gzipped. Hollow square and second
-        figure: raw. Log scale.
+      <p class="flex gap-5 pt-5 text-sm text-ink-2">
+        <span class="inline-flex items-center gap-2">
+          <span
+            aria-hidden="true"
+            class="h-3 w-3 border-2 border-current bg-paper"
+          />
+          raw
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <span aria-hidden="true" class="h-3 w-3 bg-current" />
+          gzipped
+        </span>
       </p>
     </figure>
   )
