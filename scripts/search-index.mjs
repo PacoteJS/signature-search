@@ -23,8 +23,10 @@ function reportLatency(prefix, callback) {
 const sizes = {}
 
 function writeIndices(name, data) {
-  writeJson(join('public', `${name}.json`), data)
-  sizes[name] = writeMsgPack(join('public', `${name}.msgpack`), data)
+  sizes[name] = {
+    json: writeJson(join('public', `${name}.json`), data),
+    msgpack: writeMsgPack(join('public', `${name}.msgpack`), data),
+  }
   writeFileSync(
     'public/index-sizes.json',
     JSON.stringify({ documents: documents.length, words, indexes: sizes }),
@@ -33,10 +35,13 @@ function writeIndices(name, data) {
 
 function writeJson(path, data) {
   const serializedData = JSON.stringify(data)
+  const size = Buffer.byteLength(serializedData)
+  const gzippedSize = gzipSizeSync(serializedData, { level: 9 })
   writeFileSync(path, serializedData, { encoding: 'utf8' })
   console.log(
-    `  File written to ${chalk.cyan(path)} (${chalk.yellow(`${serializedData.length} bytes`)})`,
+    `  File written to ${chalk.cyan(path)} (${chalk.yellow(`${size} bytes`)}, gzipped ${chalk.yellowBright(`${gzippedSize} bytes`)})`,
   )
+  return { size, gzippedSize }
 }
 
 function writeMsgPack(path, data) {

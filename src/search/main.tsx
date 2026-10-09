@@ -1,4 +1,5 @@
 import { signal } from '@preact/signals'
+import cx from 'clsx'
 import type { ComponentChild } from 'preact'
 import { useEffect } from 'preact/hooks'
 import { Search } from '../components/Search'
@@ -7,7 +8,15 @@ import { LIBRARIES, type SearchBackend } from './backends'
 
 const backends = signal<Record<string, SearchBackend>>({})
 const failed = signal<string[]>([])
-const sizes = signal<Record<string, { size: number; gzippedSize: number }>>({})
+const FORMATS = [
+  { id: 'json', label: 'JSON' },
+  { id: 'msgpack', label: 'MessagePack' },
+] as const
+type Format = (typeof FORMATS)[number]['id']
+type Size = { size: number; gzippedSize: number }
+
+const sizes = signal<Record<string, Record<Format, Size>>>({})
+const sizeFormat = signal<Format>('json')
 const selectedBackend = signal('bloom-search')
 const searchTerms = signal('whale')
 
@@ -81,13 +90,34 @@ function Engine({ title, terms, backend }: EngineProps) {
   )
 }
 
-/** One row per library: filled square is the gzipped size, hollow the raw size. */
+/** Arrow keys, Home and End move between format tabs. */
+function onTabKey(event: KeyboardEvent) {
+  const current = FORMATS.findIndex(({ id }) => id === sizeFormat.value)
+  const next = {
+    ArrowRight: (current + 1) % FORMATS.length,
+    ArrowLeft: (current - 1 + FORMATS.length) % FORMATS.length,
+    Home: 0,
+    End: FORMATS.length - 1,
+  }[event.key]
+  if (next === undefined) return
+  event.preventDefault()
+  sizeFormat.value = FORMATS[next].id
+  document.getElementById(`size-tab-${FORMATS[next].id}`)?.focus()
+}
+
+/** One row per library, in the selected format: filled square is the gzipped size, hollow the raw size. */
 function SizeChart({
   all,
 }: {
-  all: Pick<SearchBackend, 'name' | 'title' | 'size' | 'gzippedSize'>[]
+  all: (Pick<SearchBackend, 'name' | 'title'> & Record<Format, Size>)[]
 }) {
-  const rows = [...all].sort((a, b) => a.gzippedSize - b.gzippedSize)
+  const rows = all
+    .map(({ name, title, ...formats }) => ({
+      name,
+      title,
+      ...formats[sizeFormat.value],
+    }))
+    .sort((a, b) => a.gzippedSize - b.gzippedSize)
   const lo = Math.log10(100)
   const hi = Math.log10(20_000)
   const at = (bytes: number) =>
@@ -100,9 +130,50 @@ function SizeChart({
 
   return (
     <figure class="mt-16">
-      <figcaption class="label pb-2">Index size</figcaption>
+      <figcaption class="flex flex-wrap items-baseline gap-x-6 pb-2">
+        <span id="size-caption" class="label">
+          Index size
+        </span>
+        <span
+          role="tablist"
+          aria-labelledby="size-caption"
+          class="flex gap-5"
+          onKeyDown={onTabKey}
+        >
+          {FORMATS.map(({ id, label }) => {
+            const selected = id === sizeFormat.value
+            return (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                id={`size-tab-${id}`}
+                aria-selected={selected}
+                aria-controls="size-panel"
+                tabIndex={selected ? 0 : -1}
+                class={cx(
+                  'min-h-[2.75rem] border-b-2',
+                  selected
+                    ? 'border-accent font-semibold text-accent'
+                    : 'border-transparent text-ink-2 hover:text-accent',
+                )}
+                onClick={() => {
+                  sizeFormat.value = id
+                }}
+              >
+                {label}
+              </button>
+            )
+          })}
+        </span>
+      </figcaption>
       {/* Names sit in a column left of the plot (above it on phones). The right margin holds the figures after the last marker. */}
-      <div class="relative">
+      <div
+        role="tabpanel"
+        id="size-panel"
+        aria-labelledby={`size-tab-${sizeFormat.value}`}
+        class="relative"
+      >
         <div
           aria-hidden="true"
           class="pointer-events-none absolute inset-y-0 left-4 right-[11rem] sm:left-[10rem]"
