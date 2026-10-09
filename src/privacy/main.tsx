@@ -72,20 +72,6 @@ function generateProfiles(count: number): UserProfile[] {
   return Array.from({ length: count }, generateProfile)
 }
 
-function toBase64(signatures: Record<number, { filter: Uint32Array }>): string {
-  return Object.values(signatures).reduce((result, { filter }) => {
-    const a = new Uint32Array(filter)
-    return (
-      result +
-      btoa(
-        Array.from(new Uint8Array(a.buffer))
-          .map((byte) => String.fromCharCode(byte))
-          .join(''),
-      )
-    )
-  }, '')
-}
-
 function Profile({
   signature,
   firstName,
@@ -131,7 +117,7 @@ function App() {
     : Object.values(searchIndex.value.index.documents).map(
         ({ summary, signatures }) => ({
           summary,
-          signature: toBase64(signatures),
+          signature: Object.values(signatures).join(''),
         }),
       )
 
